@@ -1,0 +1,8 @@
+Cipher Pile
+
+The courier for an important society accidentally left a pile of
+encrypted documents (`a.enc`, `b.enc`, ..., `h.enc`) on a campus
+bench, as well the plaintext (`plain`) for one of those encrypted
+files.  A band of nine hungry squirrels has brought these files to
+your desk.  To appease the squirrels, you must determine the society's
+message that is embedded across the plaintext.
