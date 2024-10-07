@@ -1,0 +1,21 @@
+Old 97
+
+Yet another secret society on campus is trying to send an important,
+encrypted message.  Once of the members, "Alice", is trying to send
+an urgent message to "Bob" using the textbook Elgamal encryption
+system over the group Z^*_{97}.  In other words, the group elements
+are the integers 1 through 96, and the group operation is
+multiplication modulo 97.  Alice and Bob decide to use 5 as the
+group's generator, and Bob's public key is 61.
+
+Alice encrypts each character of the message separately to Bob.  The
+cryptosystem can only encrypt ASCII values 31 through 126, with ASCII
+31 mapped to group element 1, ASCII 32 mapped to group element 2, and
+so forth, with 126 mapped to group element 96.  For each character,
+Alice generates a new ephemeral key pair.  The file ciphers.txt
+contains a list of pairs of the ciphertext for a letter, and
+Alice's ephemeral public key for that encryption.  For instance,
+the first pair is (86, 63), where 86 is the encryption of some
+letter, and 63 is Alice's ephemeral public key.
+
+Decrypt the entire message and uncover the flag!
