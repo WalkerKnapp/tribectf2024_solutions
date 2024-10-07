@@ -1,0 +1,6 @@
+PROBLEM_FILE = brick.tsp
+RUNS = 10
+TOUR_FILE = bricks.txt
+TRACE_LEVEL = 1
+SEED = 1
+PRECISION = 10000
