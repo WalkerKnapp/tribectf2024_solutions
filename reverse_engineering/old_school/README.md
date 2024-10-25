@@ -16,9 +16,12 @@ By the process of elimination, that file is probably `Reaper.bin`. Let's try it 
 
 ![](./_images/reaper_bin_test.gif)
 
+Nice! Seems like `Reaper.bin` probably contains some small program that requires us to provide a password,
+which we'll give to access the key.
+
 ## Part 2 - The ROM
 
-With blind faith that the `Reaper.bin` ROM file likely contains some 6502 instructions,
+With some blind faith that the `Reaper.bin` ROM file likely contains 6502 instructions,
 we try to disassemble it with an online 6502 disassembler
 (https://www.masswerk.at/ZZZZZZZ6502/disassembler.html).
 
@@ -67,7 +70,7 @@ Signs seem to point to this at least being part of the code that gets executed, 
 
 ## Part 3 - Subroutines
 
-A subroutine in 6502 is called with a jump instruction (JSR, JMP, etc)
+A subroutine in 6502 is called with a jump to subroutine instruction (`JSR`)
 and returns by invoking an `RTS`.
 
 Right away, we can see that there are segments of the assembly that start with a labeled line
@@ -153,46 +156,50 @@ feel free to follow along in an editor of your choice!)
 1080   60         L1080     RTS
 ```
 
-Let's dive into deciphering the meaning of each!
-
-### Subroutine 1
-
-```asm
-101C   A9 0A      L101C     LDA #$0A
-101E   8D 60 20             STA $2060
-1021   A2 00                LDX #$00
-1023   BD 00 DE   L1023     LDA $DE00,X
-1026   45 03                EOR $03
-1028   9D 61 20             STA $2061,X
-102B   E8                   INX
-102C   E0 0F                CPX #$0F
-102E   D0 F3                BNE L1023
-1030   60                   RTS
-```
+This may look complex at this point, but by the end of this, we'll have determined what each line of code accomplishes.
 
 To cover some basics of 6502 Assembly,
 everything is based around CPU registers (primarily `A` and `X`),
 which contain 1 byte at a time that the CPU can perform operations on.
 
-For instance, this subroutine starts by "Loading into A" (`LDA`) the constant `0x0A`,
+For instance, subroutine 1 starts by "Loading into A" (`LDA`) the constant `0x0A`,
 and then "Storing from A" (`STA`) into the memory location `0x2060`
+
+```asm
+; Subroutine 1
+101C   A9 0A      L101C     LDA #$0A    ; Store the value 0x0A to $2060
+101E   8D 60 20             STA $2060
+...
+```
 
 Here is a quick reference table (homemade) for the instructions this program uses:
 
-| Instruction | Mnemonic            | Notes                                                                                                                             |
-|-------------|---------------------|-----------------------------------------------------------------------------------------------------------------------------------|
-| LDA         | Load into A         |                                                                                                                                   |
-| STA         | Store from A        |                                                                                                                                   |
-| LDX         | Load into X         |                                                                                                                                   |
-| STX         | Store from X        |                                                                                                                                   |
-| EOR         | Exclusive OR        | XOR the value in the `A` register against some value                                                                              |
-| INX         | Increment X         | Add `1` to the `X` register                                                                                                       |
-| CPX         | Compare against X   | Compare the value in the `X` register to some value, saving whether it was equal, less than, or greater than to the **CPU flags** |
-| BNE         | Branch if not equal | Jump execution to a different location in the code if the last comparison **did not** set the `equals` cpu flag.                  |
+| Instruction | Mnemonic                | Notes                                                                                                                              |
+|-------------|-------------------------|------------------------------------------------------------------------------------------------------------------------------------|
+| LDA         | Load into A             |                                                                                                                                    |
+| STA         | Store from A            |                                                                                                                                    |
+| LDX         | Load into X             |                                                                                                                                    |
+| STX         | Store from X            |                                                                                                                                    |
+|             | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| EOR         | Exclusive OR            | XOR the value in the `A` register against some value                                                                               |
+| INX         | Increment X             | Add `1` to the `X` register                                                                                                        |
+| DEC         | Decrement               | Decrement a value in memory.                                                                                                       |
+|             | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| CPX         | Compare against X       | Compare the value in the `X` register to some value, saving whether it was equal, less than, or greater than to the **CPU flags**  |
+| BNE         | Branch if not equal     | Jump execution to a different location in the code if the last comparison **did not** set the `equals` cpu flag.                   |
+| BEQ         | Branch if equal         | Jump execution to a different location in the code if the last comparison set the `equals` cpu flag.                               |
+| JMP         | Jump                    | Jump execution to a different location in the code unconditionally, and without expecting the code to return.                      |
+|             | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| JSR         | Jump to Subroutine      | Jump execution to a subroutine at a given offset                                                                                   |
+| RTS         | Return from Subroutine  | Jump execution back to the code that called this subroutine.                                                                       |
 
-With this knowledge, we can translate the rest of the subroutine:
+With this, we should now be able to analyze our subroutines instruction-by-instruction.
+Let's dive into deciphering the meaning of each! We'll start with the subroutines that don't call any others:
+
+### Subroutine 1
 
 ```asm
+; Subroutine 1
 101C   A9 0A      L101C     LDA #$0A    ; Store the value 0x0A to $2060
 101E   8D 60 20             STA $2060
 1021   A2 00                LDX #$00    ; Set X to 0
@@ -205,7 +212,7 @@ With this knowledge, we can translate the rest of the subroutine:
 1030   60                   RTS         ; Exit the subroutine
 ```
 
-You'll notice that there are a few instructions which take an address (like `LDA` and `STA`) which can be given an **indexed address**.
+As a note, you'll notice that there are a few instructions which take an address (like `LDA` and `STA`) which can be given an **indexed address**.
 For example, at offset `0x1023`, the `LDA` instruction takes the address `$DE00,X`.
 This just means that instead of loading from the address `$DE00`, we first add the current value of `X`.
 So for `X=0`, we'd load from `$DE00`, but for `X=5`, we'd load from `$DE05`
@@ -215,3 +222,42 @@ First, it stores one byte to `$2060`.
 Then in a loop, it takes one byte from memory, XORs it with `0x03`, and stores it back to a different point in memory.
 
 Ultimately, it takes the block of memory from `$DE00` to `$DE0F`, and writes it back to the location `$2061` (XORed by `0x03`).
+
+A quick python script to perform this operation and print it out doesn't reveal anything useful (yet), but it's good to keep in mind.
+
+[5_extract_constants.py](./5_extract_constants.py)
+
+```py
+with open("Reaper.bin", "rb") as f:
+    print("Memory from $DE00 -> $DEOF XORed with 0x03:")
+    f.seek(0xDE00)
+    print(bytes([x ^ 0x03 for x in f.read(0x0F)]))
+```
+
+![](./_images/de00-de0f.png)
+
+Maybe this could be preparing a set of data to use later. We'll call this function `preprocess_data`.
+
+### Subroutine 3
+
+```asm
+; Subroutine 3
+1045   AD 00 C0   L1045     LDA $C000   ; Load the address $C000 to A
+1048   CE 01 F0             DEC $F001   ; Decrement the value in memory at $F001 by 1
+104B   60                   RTS         ; Exit the subroutine
+```
+
+This subroutine is simple, but obscure.
+We'll hope for now that we can better analyze it in context.
+We'll call this function `load_c000`
+
+### Subroutine 4
+
+```asm
+; Subroutine 4
+104C   BD 50 DD   L104C     LDA $DD50,X ; Load the value at $DD50 + X to A
+104F   41 03                EOR ($03,X) ; XOR the value at A with 
+1051   DD 10 DD             CMP $DD10,X
+1054   F0 F6                BEQ L104C
+1056   60                   RTS
+```
