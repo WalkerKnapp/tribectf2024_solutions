@@ -36,8 +36,8 @@ int __fastcall main(int argc, const char **argv, const char **envp)
     __int64 v5;
     time_t timer;
     unsigned __int64 v7;
-
     v7 = __readfsqword(0x28u);
+    
     puts("Open sesame");
     enc();
     
@@ -81,7 +81,7 @@ Finally, we just pipe in the expected input, and run the binary!
 
 ![](./_images/faketime_run.png)
 
-Nice, it looks like that's worked! Our key is `tribectf{awe50me_w0rk_m0re_fun_cha11enge5_awa1t_y0u_w1thin}`. Pwned/QED
+Nice, it looks like that worked! Our key is `tribectf{awe50me_w0rk_m0re_fun_cha11enge5_awa1t_y0u_w1thin}`. Pwned/QED
 
 
 
