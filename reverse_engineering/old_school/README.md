@@ -14,7 +14,7 @@ We pass it a file containing the initial state of memory to set up.
 
 By the process of elimination, that file is probably `Reaper.bin`. Let's try it out:
 
-![](./_images/reaper_bin_test.mp4)
+![](./_images/reaper_bin_test.gif)
 
 ## Part 2 - The ROM
 
