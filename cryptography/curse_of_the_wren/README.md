@@ -2,6 +2,8 @@
 
 We are given the file [M3UKWCVI16P8XIIIXXX12LVIII6F13MBQCRDIEJKWMTOSPXUZGH](./M3UKWCVI16P8XIIIXXX12LVIII6F13MBQCRDIEJKWMTOSPXUZGH)
 
+## Solution
+
 For this, our technique was pretty much trial and error.
 
 We start with a stream of bytes encoded in hex, which yields a base64 string encoded in ASCII.
