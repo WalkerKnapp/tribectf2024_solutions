@@ -7,3 +7,4 @@ cryptography/cipher_pile/outputs
 **/*.kra
 *-swp
 .idea
+/forensics/hark_on_the_wire/output/
