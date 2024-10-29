@@ -1,3 +1,19 @@
+# Curse of the Wren
+
+We are given the file [M3UKWCVI16P8XIIIXXX12LVIII6F13MBQCRDIEJKWMTOSPXUZGH](./M3UKWCVI16P8XIIIXXX12LVIII6F13MBQCRDIEJKWMTOSPXUZGH)
+
+For this, our technique was pretty much trial and error.
+
+We start with a stream of bytes encoded in hex, which yields a base64 string encoded in ASCII.
+The third round is bytes encoded in octal.
+Then, you have to find that a repeating pad of `0x1693` was used to encrypt the remaining string.
+
+The final step is an enigma cipher using parameters dictated in the name of the given file!
+We used the python `enigma` library to decode this final string.
+
+All of these steps are implemented and documented in [curse_decode.py](./curse_decode.py):
+
+```py
 import base64
 
 import enigma.plugboard
@@ -56,4 +72,10 @@ print("Flag:", data5.split("theflagis")[-1]
       .replace("bracket", "{", 1)
       .replace("bracket", "}", 2)
       .rstrip("theshadowmaster"))
+```
+
+![](./_images/decoder.png)
+
+And there is our flag! Pwned/QED
+
 
