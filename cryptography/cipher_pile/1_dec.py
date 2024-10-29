@@ -1,19 +1,15 @@
-
 import gzip
 import os
 
 if not os.path.exists("outputs"):
     os.mkdir("outputs")
 
-plain = open("plain", 'rb').read()
+plain = open("problem/plain", 'rb').read()
 
 # Read in encoded input files
 encs = []
-
 for name in range(ord('a'), ord('h') + 1):
-    name = chr(name)
-
-    encs.append(open(name + ".enc", 'rb').read())
+    encs.append(open(f"problem/{chr(name)}.enc", 'rb').read())
 
 # Search for the encoded file corresponding with the given plain file
 for i in range(len(encs)):
