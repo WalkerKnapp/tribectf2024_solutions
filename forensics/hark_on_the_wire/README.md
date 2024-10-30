@@ -8,9 +8,16 @@ The packet capture we are given is full of quite a lot of noise and packets that
 
 ![](./_images/packet_capture.png)
 
-Luna used an analysis tool in order to find some particularly relevant packets close to the end of the file.
-They are a series of plain-text packets sent between `127.0.0.1` and `127.0.0.1` that appear to contain a conversation
-and some binary data:
+Luna used an analysis tool called `CapLoader` to investigate further into what's going on:
+
+![](./_images/caploader1.png)
+
+In particular, if we look at the `Gantt Chart`, we see that there is a segment of time where a lot of data is transmitted over TCP between `127.0.0.1 <-> 127.0.0.1`,
+with no other traffic at the time.
+
+![](./_images/caploader2.png)
+
+This seemed suspicious, and investigating the packets further in Wireshark, they appear to contain a conversation and some binary text:
 
 ![](./_images/packet_relevant.png)
 
