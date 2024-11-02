@@ -1,6 +1,6 @@
 # Old School
 
-We are given the files `alpha` and `Reaper.bin`.
+We are given the files [alpha](./problem/alpha) and [Reaper.bin](./problem/Reaper.bin).
 
 ## Part 1 - The Emulator
 
@@ -230,7 +230,7 @@ A quick python script to perform this operation:
 [5_extract_constants.py](./5_extract_constants.py)
 
 ```py
-with open("Reaper.bin", "rb") as f:
+with open("problem/Reaper.bin", "rb") as f:
     reaper_bin = list(f.read())
 
     print("Memory from $DE00 -> $DEOF XORed with the value at address $03:")
@@ -379,7 +379,7 @@ To figure out the data that's being read, let's write a python script to repeat 
 [5_extract_constants.py](./5_extract_constants.py)
 
 ```py
-with open("Reaper.bin", "rb") as f:
+with open("problem/Reaper.bin", "rb") as f:
     ...
 
     print("Memory from $DD80 XORed with the value at address $DE:")

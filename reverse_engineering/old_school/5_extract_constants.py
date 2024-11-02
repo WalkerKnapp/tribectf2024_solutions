@@ -1,4 +1,4 @@
-with open("Reaper.bin", "rb") as f:
+with open("problem/Reaper.bin", "rb") as f:
     reaper_bin = list(f.read())
 
     print("Memory from $DE00 -> $DEOF XORed with the value at address $03:")
