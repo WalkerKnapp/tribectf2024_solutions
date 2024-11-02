@@ -1,6 +1,6 @@
 # Griffin's Location
 
-We are given the executable binary (coordinates)[./coordinates] to analyze.
+We are given the executable binary [coordinates](./coordinates) to analyze.
 
 ## Part 1 - Program Flow
 
