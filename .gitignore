@@ -8,3 +8,8 @@ cryptography/cipher_pile/outputs
 *-swp
 .idea
 /forensics/hark_on_the_wire/output/
+/coding/skull_island/problem/target
+/coding/skull_island/refactored/target
+/coding/skull_island/reversed/target
+
+**/Cargo.lock
