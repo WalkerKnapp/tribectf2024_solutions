@@ -1,7 +1,7 @@
 # tribectf2024_solutions
 
 TribeCTF was hosted in Fall 2024 featuring 15 problems.
-Out of those, we solved 14 (every one except `signal_intercept`!)
+Out of those, we solved 14 (every one except `signal_intercept`!), which got us first place!
 Over the last couple of weeks, we've written up the methods and thought processes we've used to solve each one.
 
 We hope that this can be useful to others, whether or not you participated in the CTF!
@@ -13,6 +13,8 @@ They're tons of fun and very well written.
 Shout out to the organizers for a very well-made event! We definitely are looking forward to what you do in the future.
 
 And finally, don't be afraid to reach out and ask for additional details! Happy hacking <3
+
+&minus; Walker and Luna ("🐈‍⬛🐇🖥️")
 
 (P.S. We didn't think to copy down the flavor text during the competition, so that's unfortunately missing. Sorry!)
 
